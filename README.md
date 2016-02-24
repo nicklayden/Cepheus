@@ -5,6 +5,7 @@ Currently has the capability of processing the fits images in a directory, and u
 will calculate calibrated magnitudes for a target variable star.
 
 Future implementations:
+
 1. Period folding techniques to calculate period(s) of variable stars.
 
 2. Automatically use AAVSO data to call in reference stars and calibrated magnitudes
