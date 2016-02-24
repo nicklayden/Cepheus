@@ -15,8 +15,8 @@ Future implementations:
 3. Ability to cut out images from the data set that have overexposed or too out of focus variables in them,
    using PSF photometry.
 
+4. Ability to create a timelapse video of the variable in an HR diagram. (probably won't happen!)
 
-
-
+5. Linking Simbad/Vizier database to include other astronomical measurements for the variable star.
 
 
