@@ -286,15 +286,15 @@ class magtools(object):
         '''
         Timebin = []
         for i in range(len(maglist)):
-            if maglist[i,0] not in Timebin:
-                Timebin.append(maglist[i,0])
+            if np.floor(maglist[i,0]) not in Timebin:
+                Timebin.append(np.floor(maglist[i,0]))
         
         def sumbin(maglist, time):
             Vbin = []
             for i in range(len(maglist)):
-                if maglist[i,0] == time:
+                if np.floor(maglist[i,0]) == time:
                     Vbin.append(( maglist[i,1]))
-            return np.mean(Vbin)
+            return np.average(Vbin)
             
         avg = []
         for i in range(len(Timebin)):
