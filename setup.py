@@ -25,7 +25,7 @@ setup(
 
         'Intended Audience :: Developers',
         'Topic :: Software Development :: Documentation',
-        'Topic :: Astronomical processing ',
+        'Topic :: Astronomy :: Processing ',
         'Topic :: Documentation',
         'Topic :: Utilities',
 
