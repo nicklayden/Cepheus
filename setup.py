@@ -18,7 +18,6 @@ setup(
   author = 'Nicholas Layden',
   author_email = 'nicholas.layden@gmail.com',
   url = 'https://github.com/nicklayden/Cepheus', 
-  download_url = 'https://github.com/nicklayden/Cepheus/tarball/1.0.0',
   license='GNU',
   keywords = ['Astronomy', 'variables','cepheids'],
   classifiers=[
