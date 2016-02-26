@@ -1,6 +1,7 @@
 from setuptools import setup, find_packages
 from os import path
 from codecs import open 
+import os, io, re
 
 here = path.abspath(path.dirname(__file__))
 
@@ -8,11 +9,29 @@ here = path.abspath(path.dirname(__file__))
 with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
 
+
+def read(*names, **kwargs):
+    with io.open(
+        os.path.join(os.path.dirname(__file__), *names),    
+        encoding=kwargs.get("encoding","utf8")
+    ) as fp:
+        return fp.read()
+
+def find_version(*file_paths):
+    version_file = read(*file_paths)
+    version_match = re.search(r"^__version__ = ['\"]([^'\"]*)['\"]",
+                                  version_file, re.M)
+
+    if version_match:
+        return version_match.group(1)
+
+    raise RuntimeError("Unable to find version string.")
+
 setup(
   name = 'Cepheus',
   packages = ['Cepheus'],
   include_package_data = True,
-  version = '1.0.0',
+  version = find_version("Cepheus", '__init__.py'),
   description = 'Cepheus, son of Agenor. A program to analyze cepheid variable stars.',
   long_description = long_description,
   author = 'Nicholas Layden',
@@ -25,7 +44,6 @@ setup(
 
         'Intended Audience :: Developers',
         'Topic :: Software Development :: Documentation',
-        'Topic :: Astronomical processing ',
         'Topic :: Documentation',
         'Topic :: Utilities',
 

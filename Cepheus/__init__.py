@@ -8,6 +8,9 @@ from photutils import CircularAperture
 from photutils import aperture_photometry, CircularAnnulus
 from astropy.table import hstack
 
+
+__version__ = '1.0.1'
+
 '''
     
     If the object oriented approach doesn't simplify this enough, I suppose you could rip the code apart
