@@ -102,7 +102,6 @@ class cepheus(object):
         #print(phot_table)
         return self.cut_vals(phot_table)
         
-    @timethis
     def fluxcurve(self,sourceRA,sourceDEC, check=None):
         '''
             Stores the background subtracted photon fluxes in an aperture around the sourceRA and sourceDEC.
@@ -165,8 +164,7 @@ class cepheus(object):
         
         maglist = np.array(maglist, dtype=float)
         return maglist
-    
-    @timethis
+
     def calibrate_mag(self,sourceRA,sourceDEC,refRA,refDEC,refmag):
         '''
             Calculating the magnitude of the source star including a reference star.
@@ -283,7 +281,6 @@ class magtools(object):
 
     
     @classmethod
-    @timethis
     def Bin_up(self,maglist):
         '''
             Averages out the data taken in the same day.
@@ -292,15 +289,15 @@ class magtools(object):
         '''
         Timebin = []
         for i in range(len(maglist)):
-            if maglist[i,0] not in Timebin:
-                Timebin.append(maglist[i,0])
+            if np.floor(maglist[i,0]) not in Timebin:
+                Timebin.append(np.floor(maglist[i,0]))
         
         def sumbin(maglist, time):
             Vbin = []
             for i in range(len(maglist)):
-                if maglist[i,0] == time:
+                if np.floor(maglist[i,0]) == time:
                     Vbin.append(( maglist[i,1]))
-            return np.mean(Vbin)
+            return np.average(Vbin)
             
         avg = []
         for i in range(len(Timebin)):
@@ -314,253 +311,3 @@ class magtools(object):
             so the x axis looks nicer.
         '''
         plt.plot(maglist[:,0] - 2.45729e6, maglist[:,1], label='test bin', lw=2.0)
-
-@timethis
-def main():
-    ################################################################################################
-    #
-    #
-    #   PARAMETERS FOR THE STAR & REFERENCE OBJECTS FOR WHICH THE APPARENT MAGNITUDE IS KNOWN.
-    #
-    ################################################################################################
-    #Since hms/dms_to_deg() functions are marked as class methods, we can actually call the class object without 
-    #initializing it, fancy object oriented toolbag tricks eh. I may be digressing too much already...
-    #sourceRA = cepheus.hms_to_deg('21 21 54.73')
-    #sourceDEC= cepheus.dms_to_deg('37 27 33.1')
-    
-    sourceRA = 320.478041666667
-    sourceDEC= 37.45919444444445
-    
-    #Some reference star
-    ref1RA = 320.5825
-    ref1DEC= 37.55194445
-    periodT2 = 21.4 #days, assuming type 2 classification
-    periodRV = 42.8 #days, assuming RV tauri classification
-    
-    
-    #Check star with calibrated magnitude from aavso
-    ref2RA =320.63598633
-    ref2DEC=37.47158432
-    ref2mag = 10.397
-    ref2BV = 0.002
-    
-    #Reference star with calibrated magnitude from aavso
-    ref3RA=320.56887817
-    ref3DEC=37.47255707
-    ref3mag = 10.958
-    ref3BV = 1.002
-    
-    
-    refVBV = [(1.002,10.958), (0.002,10.397), (0.344, 11.392 ), (0.995,11.810), (1.082,12.209), (0.921,12.397)]
-    refVBV = np.array(refVBV, dtype=float)
-     
-    #plt.scatter(refVBV[:,0], refVBV[:,1], c='k')
-    ################################################################################################
-    #
-    #
-    #   INITIALIZING THE CEPHEUS OBJECT FOR EACH OF THE STARS -- TARGET - CHECK - REFERENCE.
-    #
-    ################################################################################################
-    #Directory where the pot of gold is:
-    directory = ('/home/nick/Desktop/School/Astro4200/MZCYG2')
-    
-    
-    
-    
-    
-    
-    #initializing the object source, which has the methods needed to calculate lightcurves and whatever.
-    source = cepheus(directory,sourceRA,sourceDEC)
-    
-    
-    #Creating the magnitude list for TARGET and CHECK stars, relative to REFERENCE star.
-    starminusref = source.calibrate_mag(sourceRA,sourceDEC,ref3RA,ref3DEC,ref3mag)
-    checkminusref= source.calibrate_mag(ref2RA,ref2DEC,ref3RA,ref3DEC,ref3mag)
-    
-    #Plot of the light curves for target - reference AND check - reference. Binned up by days.
-    source.plot_lightcurve(magtools.Bin_up(starminusref), label='MZcyg-Reference')
-    source.plot_lightcurve(magtools.Bin_up(checkminusref), label='Check-Reference')
-
-    
-    
-    
-#main()
-
-butthole
-
-
-
-
-
-
-'''
-
-
-#referencestar = source.mag2(ref1RA,ref1DEC)
-
-
-#plotting the lightcurves.
-#source.plot_lightcurve(referencestar)
-
-
-aavsodata = np.genfromtxt(directory+'/'+'mzcyg-aavso.dat', dtype='str', delimiter=',',skip_header=1, usecols=(0,1,2,4))
-
-Vmags = aavsodata[(aavsodata[:,3] == 'V')]
-Vmags = np.array((Vmags[:,0],Vmags[:,1]), dtype=float).T
-for i in range(len(Vmags)):
-    Vmags[i,0] = int(Vmags[i,0])
-
-Bmags = aavsodata[(aavsodata[:,3] == 'B')]
-Bmags = np.array((Bmags[:,0], Bmags[:,1]), dtype=float).T
-for i in range(len(Bmags)):
-    Bmags[i,0] = int(Bmags[i,0])
-
-Rmags = aavsodata[(aavsodata[:,3] == 'R')]
-Rmags = np.array((Rmags[:,0], Rmags[:,1]), dtype=float).T
-for i in range(len(Rmags)):
-    Rmags[i,0] = int(Rmags[i,0])
-
-Imags = aavsodata[(aavsodata[:,3] == 'I')]
-Imags = np.array((Imags[:,0], Imags[:,1]), dtype=float).T
-for i in range(len(Imags)):
-    Imags[i,0] = int(Imags[i,0])
-
-
-
-Bmags = Bmags[(Bmags[:,0] > 2.45729e6)]
-Vmags = Vmags[(Vmags[:,0] > 2.45729e6)]
-Rmags = Rmags[(Rmags[:,0] > 2.45729e6)]
-Imags = Imags[(Imags[:,0] > 2.45729e6)]
-
-meanB = np.mean(Bmags[:,1])
-meanV = np.mean(Vmags[:,1])
-meanR = np.mean(Rmags[:,1])
-meanI = np.mean(Imags[:,1])
-
-
-
-# DISTANCE CALCULATIONS
-## TYPE II CEPHEID
-BV_distance_type2 = source.PL_BV_distance(periodT2,meanB,meanV)
-
-## RV TAURI 
-
-
-BminusV = []
-for i in range(len(Bmags)):
-    for j in range(len(Vmags)):
-        if Bmags[i,0] == Vmags[j,0]:
-            BminusV.append((Bmags[i,0],Bmags[i,1] - Vmags[j,1], Vmags[j,1]))
-
-BminusV = np.array(BminusV, dtype= float)
-BminusV = BminusV[(BminusV[:,0] > 2.45729e6)]
-
-VminusR = []
-for i in range(len(Vmags)):
-    for j in range(len(Rmags)):
-        if Vmags[i,0] == Rmags[j,0]:
-            VminusR.append((Vmags[i,0],Vmags[i,1] - Rmags[j,1], Rmags[j,1]))
-
-VminusR = np.array(VminusR, dtype= float)
-VminusR = VminusR[(VminusR[:,0] > 2.45729e6)]
-
-
-
-
-
-#plt.plot(BminusV[:,1], BminusV[:,2])
-
-test = magtools.Bin_up(Vmags)    
-magtools.plot(magtools.Bin_up(Vmags))
-magtools.plot(magtools.Bin_up(Bmags))
-magtools.plot(magtools.Bin_up(Rmags))
-magtools.plot(magtools.Bin_up(Imags))
-
-#plt.plot(test[:,0] - 2.45729e6, test[:,1], label='test bin', lw=2.0)
-#source.plot_lightcurve(mystartest)
-#plt.scatter(Vmags[:,0], Vmags[:,1])
-#plt.plot(Bmags[:,0]-2.45729e6, Bmags[:,1], label='AAVSO, B filter')
-#plt.plot(Vmags[:,0]-2.45729e6, Vmags[:,1], label='AAVSO, V filter')
-#plt.plot(Rmags[:,0]-2.45729e6, Rmags[:,1], label='AAVSO, R filter')
-#plt.plot(Imags[:,0]-2.45729e6, Imags[:,1], label='AAVSO, I filter')
-#plt.xlim(2.45729e6, 2.45729e6 + 140)
-plt.ylim(10.,14.2)
-plt.legend()
-#plt.gca().invert_yaxis()
-
-'''
-'''
-fig = plt.figure(facecolor='white')
-ax = plt.axes()
-ax.set_xlim(0.4,2)
-ax.set_ylim(10,13)
-x = BVinterp
-y = Vinterp
-p = plt.plot(x,y,'ko-', c='b')
-time = np.arange(0,len(BminusV))
-
-
-cache= {}
-
-
-
-
-def animation(t):
-    global last_i, last_frame
-
-
-    i = int(t)
-    if i in cache:
-        return cache[i]
-        
-        
-    xn = BVinterp[i]
-    yn = Vinterp[i]
-    p[0].set_data(xn,yn)
-    
-    cache.clear()
-    cache[i] = mplfig_to_npimage(fig)
-    return cache[i]
-
-
-duration = 60
-fps = 60
-animation = mpy.VideoClip(animation, duration=duration)
-animation.write_videofile('test2.mp4', fps=fps)
-'''
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
