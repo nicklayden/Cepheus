@@ -12,7 +12,7 @@ setup(
   name = 'Cepheus',
   packages = ['Cepheus'],
   include_package_data = True,
-  version = '1.0.0',
+  version = '1.0.1',
   description = 'Cepheus, son of Agenor. A program to analyze cepheid variable stars.',
   long_description = long_description,
   author = 'Nicholas Layden',
