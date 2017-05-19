@@ -1,4 +1,4 @@
-from __future__ import print_function
+
 import astropy as ap
 from astropy.io import fits
 import os
