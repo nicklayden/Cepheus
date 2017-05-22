@@ -11,16 +11,6 @@ from astropy.table import hstack
 
 __version__ = '1.0.1'
 
-'''
-    
-    If the object oriented approach doesn't simplify this enough, I suppose you could rip the code apart
-    by deleting the 'class _____' crap, and remove 'self' or '@classmethod' from every function, then it 
-    will work just like normal procedural code.
-
-
-
-'''
-
 def timethis(input_function):
     '''
         Timing decorator used to report the time it took to use these functions.
@@ -53,11 +43,7 @@ class cepheus(object):
 
 
     def cut_vals(self,tbl):
-        '''
-            I don't bother using annoying astropy table objects, they are ridiculous and
-            don't behave with python nicely. So this function cuts everything out that isnt 
-            a string of digits in the table, to extract the background subtracted photon counts.
-        '''
+        ''' Cut a number out of the photutils table '''
         nums = []
         for t in repr(tbl).split():
             try:
@@ -156,6 +142,7 @@ class cepheus(object):
             
             Output: 2 column array: 1st column is magnitudes, 2nd column is julian dates from fits files.
         '''
+        print("DO NOT USE mag_calc_noref. It does NOT produce correct results.")
         testrun = self.fluxcurve(sourceRA,sourceDEC)
         maglist = []
         for i in range(len(testrun)):
@@ -189,6 +176,11 @@ class cepheus(object):
     
     @classmethod
     def PL_BV_distance(self,period,meanB,meanV):
+        ''' 
+            TYPE 2 CEPHEID LUMINOSITY DISTANCE 
+            given by Majaess,Turner,Lane  2009
+            arxiv: 0903.4206v2
+        '''
         a = meanV + 4.42*np.log10(period) - 3.43*(meanB-meanV) + 7.15        
         return 10.**(a/5.)
     
