@@ -119,7 +119,6 @@ class cepheus(object):
             worldcoord = ap.wcs.WCS(IMGheader)
             exposure = Star[0].header['EXPTIME']
             starlist.append((self.files[i],Star[0].header['OBJECT']))
-            zeromag = Star[0].header['ZMAG']
             juliandate = Star[0].header['JD-MID']
             aper_annulus = CircularAnnulus((sourceRA, sourceDEC), r_in=7., r_out = 10.)
             apertures = CircularAperture((worldcoord.wcs_world2pix(sourceRA,sourceDEC,0)), r=6)
