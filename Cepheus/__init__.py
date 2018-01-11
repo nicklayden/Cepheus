@@ -9,7 +9,7 @@ from photutils import aperture_photometry, CircularAnnulus
 from astropy.table import hstack
 
 
-__version__ = '1.0.4a'
+__version__ = '1.0.4b'
 
 def timethis(input_function):
     '''
