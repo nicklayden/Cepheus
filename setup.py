@@ -31,11 +31,7 @@ setup(
   name = 'Cepheus',
   packages = ['Cepheus'],
   include_package_data = True,
-<<<<<<< HEAD
-  version = find_version("Cepheus", '__init__.py'),
-=======
-  version = '1.0.1',
->>>>>>> 1376eb898604dd099081e37cc5b2545becd183ff
+  version = '1.0.4a',
   description = 'Cepheus, son of Agenor. A program to analyze cepheid variable stars.',
   long_description = long_description,
   author = 'Nicholas Layden',
@@ -48,10 +44,6 @@ setup(
 
         'Intended Audience :: Developers',
         'Topic :: Software Development :: Documentation',
-<<<<<<< HEAD
-=======
-        'Topic :: Astronomy :: Processing ',
->>>>>>> 1376eb898604dd099081e37cc5b2545becd183ff
         'Topic :: Documentation',
         'Topic :: Utilities',
 

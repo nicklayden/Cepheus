@@ -9,7 +9,7 @@ from photutils import aperture_photometry, CircularAnnulus
 from astropy.table import hstack
 
 
-__version__ = '1.0.1'
+__version__ = '1.0.4a'
 
 def timethis(input_function):
     '''
@@ -123,7 +123,7 @@ class cepheus(object):
             aper_annulus = CircularAnnulus((sourceRA, sourceDEC), r_in=7., r_out = 10.)
             apertures = CircularAperture((worldcoord.wcs_world2pix(sourceRA,sourceDEC,0)), r=6)
             
-            testrun.append((self.calculate_fluxes(stardata,apertures, aper_annulus)[3], exposure,juliandate , zeromag))
+            testrun.append((self.calculate_fluxes(stardata,apertures, aper_annulus)[3], exposure,juliandate))
         
         if check == True:
             return starlist
